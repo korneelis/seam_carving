@@ -22,22 +22,45 @@ def load_rgb_image(file_path):
 # 2. Run pre-trained CNN for image detection ----------------------------------
 
 from resnet import ResNet50
-import torch
+import cv2
+import numpy as np
 
-image = load_rgb_image('../data/images/cat.jpg')
+image_path = '../data/images/shark.jpg'
+raw_image = load_rgb_image(image_path)
 
 # Creat ResNet50 instance
-resnet = ResNet50()
+resnet_model = ResNet50()
+
 # Preprocess image and make a prediction
-input_batch = resnet.prepare_image(image)
-category = resnet.predict(input_batch)
+input_image = resnet_model.prepare_image(raw_image)
+prediction = resnet_model.predict(input_image)
+
+last_conv_layer = resnet_model.get_last_conv_layer()
+
+print(last_conv_layer)
+
 
 # 3. Extract feature map from a CNN using Grad-CAM ----------------------------
 
+import cv2
+import numpy as np
+from gradcam import *
+
+index = None
+
+grad_cam = GradCAM(resnet_model.model, "layer4.2")
+cam, target_index = grad_cam(input_image, index=index)
+
+small_image = cv2.imread(image_path)[..., ::-1]
+small_image = cv2.resize(small_image, (224, 224))
+cam_on_image = show_cam_on_image(small_image/255, cam)
+cv2.imwrite("../data/feature_maps/heatmap_" + image_path.split('/')[-1], cam_on_image)
+print('Image with heatmap overlay has been saved!')
+
+# 4. Modify feature map by painting ------------------------------------------
 
 
 
-# 4. Modify feature map by painting
 
 
 # 5. Use map for seam carving and remove pixel columns with low values

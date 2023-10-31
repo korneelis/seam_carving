@@ -1,0 +1,4 @@
+pillow
+
+pip install plotly
+pip install tensorflow
