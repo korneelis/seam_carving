@@ -20,7 +20,7 @@ class HeatmapPainter:
         max_value = np.max(self.cam)
         # Choose radius for brush size and sigma for gaussian blur
         radius = 6
-        sigma = 10.0
+        sigma = 20.0
 
         # Start painting when left mouse button is pressed
         if event == cv2.EVENT_LBUTTONDOWN:
@@ -40,11 +40,12 @@ class HeatmapPainter:
                 self.cam = np.minimum(self.cam + mask, max_value)
 
     def start(self, create_heatmap_on_image, background_image, image_path):
+        # Start a loop to keep displaying and updating the image
         while True:
             updated_heatmap_on_image, updated_heatmap = create_heatmap_on_image(background_image, self.cam)
             cv2.imshow('heatmap on image', updated_heatmap_on_image)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                cv2.imwrite("../data/feature_maps_updated/heatmap_" + image_path.split('/')[-1], updated_heatmap_on_image)
-                break
-        cv2.destroyAllWindows()
-
+            # If ESC is pressed, the display closes
+            if cv2.waitKey(1) & 0xFF == 27:
+                # Image and cam of final updated feature map are saved
+                cv2.imwrite("./data/feature_maps_updated/heatmap_" + image_path.split('/')[-1], updated_heatmap_on_image)
+                return self.cam
