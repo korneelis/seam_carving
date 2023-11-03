@@ -2,13 +2,14 @@
 
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 
 class SeamCarver:
     def __init__(self, image, cam):
         # Initialize image and class activation map
         self.image = image
         self.cam = cam
-
+        self.removed_seams = []
 
     def compute_min_seam(self):
         # Use cam dimensions to initialize placeholders
@@ -46,6 +47,9 @@ class SeamCarver:
             remove_pixel = seam[i]
             output_image[i, :, :] = np.delete(self.image[i, :, :], remove_pixel, axis=0)
         
+        #Keep track of every seam that is removed to use for uncarving
+        self.removed_seams.append(seam.copy())
+
         # Convert output image
         output_image = output_image.astype(np.uint8)
         
@@ -66,6 +70,50 @@ class SeamCarver:
                 self.mark_seam(min_seam)
         # Convert image from BGR to RGB
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
+
         return self.image
     
+    def uncarve_vertices(self, vertices):
+        adjusted_vertices = vertices.copy()
 
+        for seam in reversed(self.removed_seams):
+            for i, (x, y) in enumerate(adjusted_vertices):
+                # Convert to int, in case they are not
+                x = int(x)
+                y = int(y)
+
+                # Check and adjust the vertices based on the seam
+                if x >= seam[y]:
+                    adjusted_vertices[i] = (x + 1, y)
+
+        return adjusted_vertices
+    
+        
+from tkinter import Tk, Scale
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
+def seam_carving_gui(image, cam, num_seams):
+    def update_image(val):
+        num_seams = int(val)
+        seam_carver = SeamCarver(image.copy(), cam.copy())
+        updated_img = seam_carver.seam_carve(num_seams, mark=True)
+        updated_img = cv2.cvtColor(updated_img, cv2.COLOR_BGR2RGB)
+        ax.clear()
+        ax.imshow(updated_img)
+        canvas.draw()
+
+    root = Tk()
+    root.title("Seam Carving GUI")
+
+    fig = Figure(figsize=(5, 4), dpi=100)
+    ax = fig.add_subplot(111)
+
+    canvas = FigureCanvasTkAgg(fig, master=root) 
+    canvas.draw()
+    canvas.get_tk_widget().pack()
+
+    slider = Scale(root, from_=0, to=num_seams, orient="horizontal", label="Number of Seams", command=update_image)
+    slider.pack()
+
+    root.mainloop()

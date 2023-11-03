@@ -8,7 +8,7 @@ def vectorization(image):
 
     # Build vertex buffer
     num_vertices = width*height
-    vertices = np.zeros((num_vertices, 2), dtype=np.float32)
+    vertices = np.zeros((num_vertices, 2))
     
     # Assign the vertex coordinates to each pixelcenter
     for y in range(height):
@@ -18,7 +18,7 @@ def vectorization(image):
     # Build index buffer
     num_pixels = (width-1) * (height-1)
     num_triangles = num_pixels * 2
-    triangles = np.zeros((num_triangles, 3), dtype=np.int32)
+    triangles = np.zeros((num_triangles, 3))
     
     # Assign triangles 
     for y in range(height-1):

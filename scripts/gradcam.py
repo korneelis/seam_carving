@@ -3,7 +3,7 @@
 import cv2
 import numpy as np
 import torch
-
+    
 class GradCam():
     def __init__(self, model, target_layer):
         # Set model to evaluation mode
@@ -36,7 +36,7 @@ class GradCam():
             index = np.argmax(output.cpu().data.numpy())
 
         # Create vector to store target class scores
-        target_class_vector = np.zeros((1, output.size()[-1]), dtype = np.float32)
+        target_class_vector = np.zeros((1, output.size()[-1]))
         target_class_vector[0][index] = 1
         target_class_vector = torch.from_numpy(target_class_vector)
         target_class_vector.requires_grad_()
@@ -55,33 +55,17 @@ class GradCam():
         # Calculate class activation map (cam)
         cam = np.sum(self.feature_map * self.weights[:, None, None], axis=0)
         # Apply ReLU and resize to original image size
-        cam = np.maximum(cam, 0)
+        cam = np.maximum(cam, 0)    
         cam = cv2.resize(cam, (x.size()[-1], x.size()[-2]))
         #cam = cv2.resize(cam, original_size)
 
-        return cam
+        # Find minimum and maximum cam values
+        cam_min = np.min(cam)
+        cam_max = np.max(cam)
+        # Normalize cam
+        cam_normalized = (cam - cam_min) / (cam_max - cam_min)
 
-def prepare_image(image_path):
-    # Prepare background image
-    background_image = cv2.imread(image_path)[..., ::-1]
-    background_image = cv2.resize(background_image, (224, 224))
-
-    return background_image
-
-def create_heatmap_on_image(background_image, cam):
-    # Prepare heatmap by applying color to class activation map
-    heatmap = cv2.applyColorMap(np.uint8(255*cam), cv2.COLORMAP_JET)
-
-    # Normalize and combine image and heatmap
-    heatmap = np.float32(heatmap)/255
-    background_image = np.float32(background_image/255)
-    heatmap_on_image = heatmap + background_image
-    
-    # Normalize result and prepare for display
-    heatmap_on_image = heatmap_on_image / np.max(heatmap_on_image)
-    heatmap_on_image = np.uint8(255*heatmap_on_image)
-
-    return heatmap_on_image, heatmap
+        return cam_normalized
 
 
 # Sources:

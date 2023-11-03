@@ -10,10 +10,10 @@ class HeatmapPainter:
 
         # Set painting variable to 'False' and open the heatmap_on_image to start painting
         self.painting = False
-        cv2.namedWindow('heatmap on image')
+        cv2.namedWindow('Heatmap on image')
 
         # Call update function when mouse
-        cv2.setMouseCallback('heatmap on image', self.update_heatmap)
+        cv2.setMouseCallback('Heatmap on image', self.update_heatmap)
 
     def update_heatmap(self, event, x, y, flags, param):
         # Determine the max value to cap the intensity    
@@ -43,7 +43,7 @@ class HeatmapPainter:
         # Start a loop to keep displaying and updating the image
         while True:
             updated_heatmap_on_image, updated_heatmap = create_heatmap_on_image(background_image, self.cam)
-            cv2.imshow('heatmap on image', updated_heatmap_on_image)
+            cv2.imshow('Heatmap on image', updated_heatmap_on_image)
             # If ESC is pressed, the display closes
             if cv2.waitKey(1) & 0xFF == 27:
                 # Image and cam of final updated feature map are saved

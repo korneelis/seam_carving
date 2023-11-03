@@ -27,10 +27,8 @@ class ResNet50:
 
     def predict(self, input_batch):
         # Apply model to input
-        
         with torch.no_grad():
             prediction = self.model(input_batch).squeeze(0).softmax(0)
-        #prediction = self.model(input_batch).squeeze(0).softmax(0)
 
         # Determine the classification categories
         class_id = prediction.argmax().item()
@@ -42,6 +40,7 @@ class ResNet50:
         print(f"{category_name} ({class_id}): {100 * score:.1f}%")   
 
         return category_name 
+    
 
 # source https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50
 # source https://keras.io/api/applications/#usage-examples-for-image-classification-models
