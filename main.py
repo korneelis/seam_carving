@@ -3,7 +3,7 @@
 from scripts.utilities import load_rgb_image
 
 # Load RGB image from disk
-image_path = './data/images/cat.jpg'
+image_path = './data/images/jellyfish_tigershark.jpg'
 raw_image = load_rgb_image(image_path)
 
 # -------------------- 2. Run pre-trained CNN for image detection -------------------------------------------------------------------------------------------
@@ -29,11 +29,11 @@ depth_map = depth_estimator.predict_depth(raw_image)
 
 import cv2
 from scripts.gradcam import GradCam
-from scripts.utilities import load_rgb_image, prepare_image, display_heatmap_on_image, combine_feature_maps
+from scripts.utilities import load_rgb_image, prepare_image, display_heatmap_on_image, combine_feature_maps, visualize_image
 import matplotlib.pyplot as plt
 
 # Choose specific class_id or leave 'None' to use class with highest score from ResNet50
-class_id = None
+class_id = 107
 # Choose cnn ratio. A higher value will give more weight to resnet, a lower value to the depth estimation
 cnn_ratio = 0.5
 
@@ -65,21 +65,22 @@ from scripts.painting import HeatmapPainter
 # Create HeatmapPainter instance
 painter = HeatmapPainter(feature_maps)
 # Start painting and save result
-updated_cam = painter.start(display_heatmap_on_image, background_image, image_path)
+updated_map = painter.start(display_heatmap_on_image, background_image, image_path)
 
 # ---------------------- 5. Use map for seam carving and remove pixel columns with low values -------------------------------------------------------------------
 
-from scripts.seam_carving import SeamCarver
+from scripts.seam_carving import SeamCarver, visualize_uncarving
 
 # Choose number of seams that should be removed
-num_seams = 5
+num_seams = 50
 
 # Create SeamCarver instance
-carver = SeamCarver(background_image, updated_cam)
+carver = SeamCarver(background_image, updated_map)
+# carved_image = carver.crop_c(scale_c=0.5)
+
 # Generate carved image and visualize
-carved_image = carver.seam_carve(num_seams=num_seams)
-cv2.imshow('Carved Image', carved_image)
-cv2.waitKey(0)
+carved_image = carver.seam_carve(num_seams)
+visualize_image(carved_image, 'Carved Image')
 
 # ---------------------- 6. Vectorize remaining pixels by replacing them by triangle pairs -----------------------------------------------------------------------
 
@@ -88,18 +89,29 @@ from scripts.vectorization import vectorization, visualize_triangles
 # Vectorize the carved_image
 vertices, triangles = vectorization(carved_image)
 # Visualize triangle pairs
-vector_visualisation = visualize_triangles(vertices, triangles)
+visualize_triangles(vertices, triangles)
 
 # ---------------------- 7. Move vectors back to original positions by "uncarving" the previously removed columns ------------------------------------------------
 
+# Uncarving of vertices
+uncarving_visualisation_input = prepare_image(image_path)
+vertices_updated = carver.uncarve_vertices(vertices)
 
-
+# Visualizations
+visualize_uncarving(uncarving_visualisation_input, vertices_updated)
+visualize_triangles(vertices_updated, triangles)
 
 
 # ---------------------- 8. Smoothly interpolate the colors in the stretched vector graphics and rasterize it back to an image -----------------------------------
+from scripts.color_interpolation import ColorInterpolator
 
+# Create ColorInterpolator instance
+color_interpolator = ColorInterpolator(background_image)
+# Interpolate colors for each triangle
+rasterized_image = color_interpolator.interpolate_colors(vertices_updated, triangles)
 
-
+# Display the final rasterized image
+visualize_image(rasterized_image, 'Rasterized Image')
 
 # ---------------------- 9. Save and display result -------------------------------------------------------------------------------------------------------------
 
@@ -110,10 +122,12 @@ vector_visualisation = visualize_triangles(vertices, triangles)
 
 from scripts.seam_carving import seam_carving_gui
 
-seam_carving_gui(background_image, updated_cam, num_seams)
+seam_carving_gui(background_image, updated_map, num_seams)
 
 # --------------------- 11. Add another CNN with features conditioned on a different type of user input (text, depth map, image, sketch,...) ---------------------------
 
 # See CNN section above
 
 # --------------------12. Devise strategy for orientation of the triangle diagonals -----------------------------------------------------------------------------------------
+
+

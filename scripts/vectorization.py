@@ -41,4 +41,5 @@ def visualize_triangles(vertices, triangles):
     #Visualize triangulation
     plt.figure()
     plt.triplot(tri)
+    plt.gca().set_aspect('equal', adjustable='box')
     plt.show()

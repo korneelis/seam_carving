@@ -19,8 +19,8 @@ class HeatmapPainter:
         # Determine the max value to cap the intensity    
         max_value = np.max(self.cam)
         # Choose radius for brush size and sigma for gaussian blur
-        radius = 6
-        sigma = 20.0
+        radius = 5
+        sigma = 10.0
 
         # Start painting when left mouse button is pressed
         if event == cv2.EVENT_LBUTTONDOWN:

@@ -24,6 +24,10 @@ class SeamCarver:
                 if j == 0:
                     idx = np.argmin(min_cam[i - 1, j:j + 2])
                     min_energy = min_cam[i - 1, idx + j]
+                elif j == cols - 1:
+                    idx = np.argmin(min_cam[i - 1, j - 1:j + 1])
+                    min_energy = min_cam[i - 1, idx + j - 1]
+                    backtrack[i, j] = idx + j - 1
                 else:
                     idx = np.argmin(min_cam[i - 1, j - 1:j + 2])
                     min_energy = min_cam[i - 1, idx + j - 1]
@@ -41,15 +45,22 @@ class SeamCarver:
         # Get image dimensions and create placeholder for output image (with one less column)
         height, width, _ = self.image.shape
         output_image = np.zeros((height, width-1, 3))
-        
+        output_cam = np.zeros((height, width - 1))
+
         # Loop through the rows and remove pixel that is specified by seam
         for i in range(height):
             remove_pixel = seam[i]
             output_image[i, :, :] = np.delete(self.image[i, :, :], remove_pixel, axis=0)
+            output_cam[i, :] = np.delete(self.cam[i, :], remove_pixel, axis=0)
         
         #Keep track of every seam that is removed to use for uncarving
         self.removed_seams.append(seam.copy())
+        
+        # Update the cam
+        self.cam = output_cam
+        self.image = output_image
 
+        
         # Convert output image
         output_image = output_image.astype(np.uint8)
         
@@ -58,7 +69,7 @@ class SeamCarver:
     def mark_seam(self, seam):
         # mark the seam for visualization
         for row, col in enumerate(seam):
-            self.image[row, col, :] = [0, 0, 255]
+            self.image[row, col-1, :] = [0, 0, 255]
 
     def seam_carve(self, num_seams, mark=False):
         # Find minimum seam and remove it (num_seams times)
@@ -117,3 +128,13 @@ def seam_carving_gui(image, cam, num_seams):
     slider.pack()
 
     root.mainloop()
+
+def visualize_uncarving(image, updated_vertices):
+    # Create a final image with adjusted vertices
+    for x, y in updated_vertices:
+        image[int(y), int(x)] = [50, 50, 50]
+
+    # Show final visualization
+    plt.imshow(image)
+    plt.title('Carved Parts')
+    plt.show()
