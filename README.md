@@ -86,9 +86,7 @@ While the main script is running, several visualizations will pop-up of intermed
 
 ### Output
 
-After running the script, check the data folder to find generated outputs at various stages. Below you find the results of the example image.
-
-
+After running the script, check the data folder to find generated outputs at various stages. In the [report file]{cs436523ksomers/seam_carved_vectorization _report.pdf} you will find example outputs.
 
 ## 4. Algorithmic Steps 
 
