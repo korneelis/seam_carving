@@ -15,6 +15,8 @@ class GradCam():
                 # save feature maps and gradients of target layer
                 module[1].register_forward_hook(self.save_feature_map)
                 module[1].register_full_backward_hook(self.save_grad)
+
+        print("GradCam initialized")
     
     # Function to save the output feature map during forward pass 
     def save_feature_map(self, module, input, output):

@@ -105,7 +105,7 @@ Below are the algorithmic steps of this project, along with links to the relevan
 9. **Save and display result** - Displaying results is managed within the relevant scripts according to what is being displayed. The saving is handled through OpenCV's `cv2.imwrite()` function.
 10. **Visualize the steps of the carving** - See [seam_carving_gui](https://gitlab.ewi.tudelft.nl/cgv/cs4365/student-repositories/2023-2024/cs436523ksomers/-/blob/main/scripts/seam_carving.py?ref_type=heads#L112) in [seam_carving.py](scripts/seam_carving.py)
 11. **Add another CNN with features conditioned on different types of user input** - [depth_estimation.py](scripts/depth_estimation.py)
-12. **Devise strategy for orientation of the triangle diagonals**
+12. **Devise strategy for orientation of the triangle diagonals** - [seam_carving.py](scripts/seam_carving.py), [vectorization.py](scripts/vectorization.py)
 
 
 

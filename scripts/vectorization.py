@@ -89,6 +89,7 @@ def visualize_triangles_uncarved(image, updated_vertices, triangles):
     #Visualize triangulation
     plt.subplot(1, 2, 2)
     plt.triplot(tri)
+    plt.gca().invert_yaxis() 
     plt.gca().set_aspect('equal', adjustable='box')
     plt.title('Triangulation')
 

@@ -21,7 +21,7 @@ if image_path_input and os.path.isfile(image_path_input):
     image_path = image_path_input
 else:
     print("Invalid or no input. Using default image")
-    image_path = './data/images/jellyfish_tigershark.jpg'
+    image_path = './data/images/orca.jpg'
     
 raw_image = load_rgb_image(image_path)
 visualize_image(raw_image, 'Raw Image')
@@ -40,14 +40,6 @@ prediction = resnet_model.predict(input_image)
 class_id_input = input("Enter a specific class_id or leave blank to use class with highest score: ")
 class_id = int(class_id_input) if class_id_input.isdigit() else None
 
-# User input for cnn_ratio
-cnn_ratio_input = input("Enter a CNN ratio (higher values give more weight to object recognition, lower values to depth map): ")
-try:
-    cnn_ratio = float(cnn_ratio_input)
-except ValueError:
-    print("Invalid input for cnn ratio. Using default value 0.5")
-    cnn_ratio = 0.5
-
 # Create GradCam instance and compute class activation map
 grad_cam = GradCam(resnet_model.model, "layer4.2")
 cam = grad_cam(input_image, index=class_id)
@@ -61,6 +53,14 @@ depth_map = depth_estimator.predict_depth(raw_image)
 
 # ----------------------- Generate Combined Heatmap -----------------------------
 
+# User input for cnn_ratio
+cnn_ratio_input = input("Enter a CNN ratio (higher values give more weight to object recognition, lower values to depth map): ")
+try:
+    cnn_ratio = float(cnn_ratio_input)
+except ValueError:
+    print("Invalid input for cnn ratio. Using default value 0.5")
+    cnn_ratio = 0.5
+    
 # Combine the class activation map and the depth map
 feature_maps = combine_feature_maps(cam, depth_map, cnn_ratio)
 # Prepare background image
@@ -127,6 +127,7 @@ color_interpolator = ColorInterpolator(background_image)
 rasterized_image = color_interpolator.interpolate_colors(vertices_updated, triangles)
 rasterized_image_array = np.array(rasterized_image)
 
+rasterized_image_array = cv2.cvtColor(rasterized_image_array, cv2.COLOR_RGB2BGR)
 cv2.imwrite("./data/output_images/rasterized_" + image_path.split('/')[-1], rasterized_image_array)
 
 # Display the final rasterized image

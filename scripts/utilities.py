@@ -19,21 +19,6 @@ def load_rgb_image(file_path):
         print(f"Error loading the image: {str(e)}")
         return None
 
-
-def prepare_image(image_path):
-    # Prepare background image
-    background_image = cv2.imread(image_path)[..., ::-1]
-    background_image = cv2.resize(background_image, (224, 224))
-
-    return background_image
-
-def visualize_image(image, title):
-    # Visualize image with given title
-    plt.imshow(image)
-    plt.title(title)
-    plt.axis('off')
-    plt.show()
-
 def combine_feature_maps(cam, depth_map, cnn_ratio):
     # Combine the cam with the depth map according to the cnn ratio
     combined_cam = cnn_ratio * cam + (1 - cnn_ratio) * depth_map
@@ -54,3 +39,16 @@ def display_heatmap_on_image(background_image, feature_map):
 
     return heatmap_on_image, heatmap
 
+def prepare_image(image_path):
+    # Prepare background image
+    background_image = cv2.imread(image_path)[..., ::-1]
+    background_image = cv2.resize(background_image, (224, 224))
+
+    return background_image
+
+def visualize_image(image, title):
+    # Visualize image with given title
+    plt.imshow(image)
+    plt.title(title)
+    plt.axis('off')
+    plt.show()
