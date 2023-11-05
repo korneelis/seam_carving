@@ -1,3 +1,18 @@
+# Seam Carved Vectorization
+
+This project ... Explaination
+
+
+Seamcarving visualization + Interpolated image
+
+## Environment Setup
+
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 ## File Structure
 
 ```
@@ -18,3 +33,11 @@ project_root/
 ├── README.md
 └── requirements.txt
 ```
+
+## Running the Project
+
+## Algorithmic Steps 
+
+
+## Gitlab Repository
+

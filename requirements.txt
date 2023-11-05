@@ -1,2 +1,9 @@
-pillow
-pip install timm
+matplotlib
+opencv-python
+torch
+torchvision
+Pillow
+numpy
+tqdm
+opencv-python-headless
+tk

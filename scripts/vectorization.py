@@ -69,7 +69,7 @@ def visualize_triangles_carved(carved_image, vertices, triangles):
     plt.show()
 
 def visualize_triangles_uncarved(image, updated_vertices, triangles):
-    plt.subplots(1, 2, figsize=(10, 5)) 
+    plt.subplots(1, 2, figsize=(8, 5)) 
 
     # First subplot - Carved Parts with Updated Vertices
     for x, y in updated_vertices:
