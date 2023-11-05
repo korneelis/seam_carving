@@ -1,8 +1,8 @@
-# source: https://github.com/kamata1729/visualize-pytorch/blob/master/src/gradCAM.py
-
 import cv2
 import numpy as np
 import torch
+
+# Source: https://github.com/kamata1729/visualize-pytorch/blob/master/src/gradCAM.py
     
 class GradCam():
     def __init__(self, model, target_layer):
@@ -57,7 +57,6 @@ class GradCam():
         # Apply ReLU and resize to original image size
         cam = np.maximum(cam, 0)    
         cam = cv2.resize(cam, (x.size()[-1], x.size()[-2]))
-        #cam = cv2.resize(cam, original_size)
 
         # Find minimum and maximum cam values
         cam_min = np.min(cam)
@@ -68,7 +67,7 @@ class GradCam():
         return cam_normalized
 
 
-# Sources:
+# Other sources:
 # https://github.com/ismailuddin/gradcam-tensorflow-2/blob/master/notebooks/GradCam.ipynb
 # https://medium.com/the-owl/gradcam-in-pytorch-7b700caa79e5
 # https://github.com/Caoliangjie/pytorch-gradcam-resnet50/blob/master/grad-cam.py

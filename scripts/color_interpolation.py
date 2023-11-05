@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image, ImageDraw
+from tqdm import tqdm
 
 class ColorInterpolator:
     def __init__(self, image):
@@ -17,7 +18,7 @@ class ColorInterpolator:
         draw = ImageDraw.Draw(raster_image)
 
         # Loop over all triangles and rasterize them
-        for triangle in triangles:
+        for triangle in tqdm(triangles, desc="Interpolating colors"):
             self.rasterize_triangle(vertices, color_data, draw, triangle)
 
         return raster_image

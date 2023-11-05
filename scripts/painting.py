@@ -1,5 +1,3 @@
-# source: https://vovkos.github.io/doxyrest-showcase/opencv/sphinx_rtd_theme/enum_cv_MouseEventTypes.html#doxid-d7-dfc-group-highgui-1gga927593befdddc7e7013602bca9b079b0ad3419100fc2d7688c6dbe3da030fbfd9
-
 import cv2
 import numpy as np
 

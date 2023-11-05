@@ -1,11 +1,11 @@
+import torch
+from torchvision.transforms import Compose, Resize, ToTensor, Normalize
+import numpy as np
+
 # Sources: 
 # https://pytorch.org/hub/intelisl_midas_v2/ 
 # https://github.com/isl-org/MiDaS
 # https://www.kaggle.com/code/rajeevsharma993/depth-detection-using-intel-s-midas
-
-import torch
-from torchvision.transforms import Compose, Resize, ToTensor, Normalize
-import numpy as np
 
 class MidasEstimation:
     def __init__(self):
@@ -19,6 +19,8 @@ class MidasEstimation:
             ToTensor(),  
             Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
+
+        print("MidasEstimation initialized")
         
     def predict_depth(self, raw_image):
         # Preprocess the raw image
@@ -37,3 +39,4 @@ class MidasEstimation:
         normalized_depth_map = (depth_map - min_val) / (max_val - min_val)
 
         return normalized_depth_map
+    

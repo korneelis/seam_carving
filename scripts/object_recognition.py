@@ -1,7 +1,10 @@
 import torch
 import torchvision.models as models
 
-# Sources: https://pytorch.org/vision/stable/models.html#id
+# Sources: 
+# https://pytorch.org/vision/stable/models.html#id
+# https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50
+# https://keras.io/api/applications/#usage-examples-for-image-classification-models
 
 class ResNet50:
     def __init__(self):
@@ -13,12 +16,7 @@ class ResNet50:
         # Image preprocessing pipeline (standardize input to meet model requirements/improve performance)
         self.preprocess = weights.transforms()
 
-        # self.preprocess = transforms.Compose([
-        #     transforms.Resize(256),
-        #     transforms.CenterCrop(224),
-        #     transforms.ToTensor(),
-        #     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        # ])
+        print("ResNet50 initialized")
 
     def prepare_image(self, raw_image):
         # Preprocess image
@@ -42,5 +40,4 @@ class ResNet50:
         return category_name 
     
 
-# source https://www.tensorflow.org/api_docs/python/tf/keras/applications/resnet50
-# source https://keras.io/api/applications/#usage-examples-for-image-classification-models
+
