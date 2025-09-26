@@ -1,7 +1,7 @@
 # Seam Carved Vectorization
 **Author:** Korneel Somers  
 **Date:** November 2023  
-**Git Repository:** [Seam Carved Vectorization Project](https://gitlab.ewi.tudelft.nl/cgv/cs4365/student-repositories/2023-2024/cs436523ksomers.git)
+**Git Repository:** [Seam Carved Vectorization Project](https://github.com/korneelis/seam_carving/)
 
 This project performs content aware resizing for images. It uses ResNet50 and GradCam to generate the feature map of a certain class of objects in an image and Midas for a depth map. These maps are combined and can be edited by the user, to then be used as input for seam carving. Eventually, the image is upsized again by 'uncarving' it and interpolating the pixel colors.
 
