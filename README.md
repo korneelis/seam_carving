@@ -86,22 +86,22 @@ While the main script is running, several visualizations will pop-up of intermed
 
 ### Output
 
-After running the script, check the data folder to find generated outputs at various stages. In the [report file](https://gitlab.ewi.tudelft.nl/cgv/cs4365/student-repositories/2023-2024/cs436523ksomers/-/blob/main/seam_carved_vectorization%20_report.pdf?ref_type=heads) you will find example outputs.
+After running the script, check the data folder to find generated outputs at various stages. In the same folder you will already find some [examples outputs](data/).
 
 ## 4. Algorithmic Steps 
 
 Below are the algorithmic steps of this project, along with links to the relevant scripts:
 
-1. **Load RGB image from disk** - See [load_rgb_image](https://gitlab.ewi.tudelft.nl/cgv/cs4365/student-repositories/2023-2024/cs436523ksomers/-/blob/main/scripts/utilities.py?ref_type=heads#L7) in [utilities.py](scripts/utilities.py)
+1. **Load RGB image from disk** - See [load_rgb_image](https://github.com/korneelis/seam_carving/blob/466b7e8b29016d89b6b772eb61b28a1686096061/scripts/utilities.py#L7) in [utilities.py](scripts/utilities.py)
 2. **Run pre-trained CNN for image detection** - [object_recognition.py](scripts/object_recognition.py)
 3. **Extract feature map from a CNN using Grad-CAM** - [gradcam.py](scripts/gradcam.py)
 4. **Modify feature map by painting** - [painting.py](scripts/painting.py)
 5. **Use map for seam carving and remove pixel columns with low values** - [seam_carving.py](scripts/seam_carving.py)
 6. **Vectorize remaining pixels by replacing them by triangle pairs** - [vectorization.py](scripts/vectorization.py)
-7. **Move vectors back to original positions by "uncarving" the previously removed columns** - See [uncarve_vertices](https://gitlab.ewi.tudelft.nl/cgv/cs4365/student-repositories/2023-2024/cs436523ksomers/-/blob/main/scripts/seam_carving.py?ref_type=heads#L97) in [seam_carving.py](scripts/seam_carving.py)
+7. **Move vectors back to original positions by "uncarving" the previously removed columns** - See [uncarve_vertices](https://github.com/korneelis/seam_carving/blob/466b7e8b29016d89b6b772eb61b28a1686096061/scripts/seam_carving.py#L97) in [seam_carving.py](scripts/seam_carving.py)
 8. **Smoothly interpolate the colors in the stretched vector graphics and rasterize it back to an image** - [color_interpolation.py](scripts/color_interpolation.py)
 9. **Save and display result** - Displaying results is managed within the relevant scripts according to what is being displayed. The saving is handled through OpenCV's `cv2.imwrite()` function.
-10. **Visualize the steps of the carving** - See [seam_carving_gui](https://gitlab.ewi.tudelft.nl/cgv/cs4365/student-repositories/2023-2024/cs436523ksomers/-/blob/main/scripts/seam_carving.py?ref_type=heads#L112) in [seam_carving.py](scripts/seam_carving.py)
+10. **Visualize the steps of the carving** - See [seam_carving_gui](https://github.com/korneelis/seam_carving/blob/466b7e8b29016d89b6b772eb61b28a1686096061/scripts/seam_carving.py#L112) in [seam_carving.py](scripts/seam_carving.py)
 11. **Add another CNN with features conditioned on different types of user input** - [depth_estimation.py](scripts/depth_estimation.py)
 12. **Devise strategy for orientation of the triangle diagonals** - [seam_carving.py](scripts/seam_carving.py), [vectorization.py](scripts/vectorization.py)
 
